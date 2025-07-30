@@ -1,0 +1,21 @@
+package component:main;
+
+interface res {
+  resource res;
+}
+
+interface main {
+  use res.{res};
+  test: func(x: res);
+}
+
+world root {
+  import res;
+  export main;
+}
+
+world imports {
+  import res;
+  export res;
+}
+

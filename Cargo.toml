@@ -1,0 +1,6 @@
+[workspace]
+members = ["main", "virt"]
+resolver = "2"
+
+[workspace.dependencies]
+wit-bindgen-rt = "0.43.0"
