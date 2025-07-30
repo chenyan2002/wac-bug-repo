@@ -1,0 +1,5 @@
+package composed:component;
+
+let imports = new virt:imports { ... };
+let main = new root:component { ...imports };
+export main...;

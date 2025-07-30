@@ -1,4 +1,4 @@
-# steps to repo
+# Steps to repo
 
 * Run `./build.sh` to produce the original `main.wasm` and composed `composed.wasm`.
 * `wasm-tools component wit main.wasm` shows
