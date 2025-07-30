@@ -2,401 +2,608 @@
 // Options used:
 //   * stubs
 //   * runtime_path: "wit_bindgen_rt"
-impl exports::component::main::res::GuestRes for Stub {
+//   * proxy_component: import
+impl exports::component::main::async_io::GuestHandle
+for component::main::async_io::Handle {}
+impl exports::component::main::async_io::Guest for Stub {
+    type Handle = component::main::async_io::Handle;
 }
-impl exports::component::main::res::Guest for Stub {
-  type Res = Stub;
+impl exports::component::main::http_body::Guest for Stub {
+    #[allow(unused_variables)]
+    #[allow(async_fn_in_trait)]
+    fn test(x: exports::component::main::http_body::BodyHandle) -> () {
+        use crate::ToWave;
+        let mut params: Vec<String> = Vec::new();
+        params.push(x.to_wave_string());
+        proxy::recorder::record::record("test", &params, "");
+        let res = crate::component::main::http_body::test(x.to_import_owned());
+        proxy::recorder::record::record("test", &[], &res.to_wave_string());
+    }
 }
+impl exports::component::main::http_resp::Guest for Stub {
+    #[allow(unused_variables)]
+    #[allow(async_fn_in_trait)]
+    fn test(x: exports::component::main::http_resp::BodyHandle) -> () {
+        use crate::ToWave;
+        let mut params: Vec<String> = Vec::new();
+        params.push(x.to_wave_string());
+        proxy::recorder::record::record("test", &params, "");
+        let res = crate::component::main::http_resp::test(x.to_import_owned());
+        proxy::recorder::record::record("test", &[], &res.to_wave_string());
+    }
+}
+#[rustfmt::skip]
 #[allow(dead_code, clippy::all)]
 pub mod component {
-  pub mod main {
-
-    #[allow(dead_code, async_fn_in_trait, unused_imports, clippy::all)]
-    pub mod res {
-      #[used]
-      #[doc(hidden)]
-      static __FORCE_SECTION_REF: fn() =
-      super::super::super::__link_custom_section_describing_imports;
-      
-      use super::super::super::_rt;
-
-      #[derive(Debug)]
-      #[repr(transparent)]
-      pub struct Res{
-        handle: _rt::Resource<Res>,
-      }
-
-      impl Res{
-        #[doc(hidden)]
-        pub unsafe fn from_handle(handle: u32) -> Self {
-          Self {
-            handle: unsafe { _rt::Resource::from_handle(handle) },
-          }
+    pub mod main {
+        #[allow(dead_code, async_fn_in_trait, unused_imports, clippy::all)]
+        pub mod async_io {
+            #[used]
+            #[doc(hidden)]
+            static __FORCE_SECTION_REF: fn() = super::super::super::__link_custom_section_describing_imports;
+            use super::super::super::_rt;
+            #[derive(Debug)]
+            #[repr(transparent)]
+            pub struct Handle {
+                handle: _rt::Resource<Handle>,
+            }
+            impl Handle {
+                #[doc(hidden)]
+                pub unsafe fn from_handle(handle: u32) -> Self {
+                    Self {
+                        handle: unsafe { _rt::Resource::from_handle(handle) },
+                    }
+                }
+                #[doc(hidden)]
+                pub fn take_handle(&self) -> u32 {
+                    _rt::Resource::take_handle(&self.handle)
+                }
+                #[doc(hidden)]
+                pub fn handle(&self) -> u32 {
+                    _rt::Resource::handle(&self.handle)
+                }
+            }
+            impl crate::ToExport for Handle {
+                type Output = crate::exports::component::main::async_io::Handle;
+                fn to_export(self) -> Self::Output {
+                    Self::Output::new(self)
+                }
+            }
+            unsafe impl _rt::WasmResource for Handle {
+                #[inline]
+                unsafe fn drop(_handle: u32) {
+                    #[cfg(target_arch = "wasm32")]
+                    #[link(wasm_import_module = "component:main/async-io")]
+                    unsafe extern "C" {
+                        #[link_name = "[resource-drop]handle"]
+                        fn drop(_: i32);
+                    }
+                    #[cfg(not(target_arch = "wasm32"))]
+                    unsafe extern "C" fn drop(_: i32) {
+                        unreachable!()
+                    }
+                    unsafe {
+                        drop(_handle as i32);
+                    }
+                }
+            }
         }
-
-        #[doc(hidden)]
-        pub fn take_handle(&self) -> u32 {
-          _rt::Resource::take_handle(&self.handle)
+        #[allow(dead_code, async_fn_in_trait, unused_imports, clippy::all)]
+        pub mod http_body {
+            #[used]
+            #[doc(hidden)]
+            static __FORCE_SECTION_REF: fn() = super::super::super::__link_custom_section_describing_imports;
+            pub type BodyHandle = super::super::super::component::main::async_io::Handle;
+            #[allow(unused_unsafe, clippy::all)]
+            #[allow(async_fn_in_trait)]
+            pub fn test(x: BodyHandle) -> () {
+                unsafe {
+                    #[cfg(target_arch = "wasm32")]
+                    #[link(wasm_import_module = "component:main/http-body")]
+                    unsafe extern "C" {
+                        #[link_name = "test"]
+                        fn wit_import0(_: i32);
+                    }
+                    #[cfg(not(target_arch = "wasm32"))]
+                    unsafe extern "C" fn wit_import0(_: i32) {
+                        unreachable!()
+                    }
+                    wit_import0((&x).take_handle() as i32);
+                }
+            }
         }
-
-        #[doc(hidden)]
-        pub fn handle(&self) -> u32 {
-          _rt::Resource::handle(&self.handle)
+        #[allow(dead_code, async_fn_in_trait, unused_imports, clippy::all)]
+        pub mod http_resp {
+            #[used]
+            #[doc(hidden)]
+            static __FORCE_SECTION_REF: fn() = super::super::super::__link_custom_section_describing_imports;
+            pub type BodyHandle = super::super::super::component::main::http_body::BodyHandle;
+            #[allow(unused_unsafe, clippy::all)]
+            #[allow(async_fn_in_trait)]
+            pub fn test(x: BodyHandle) -> () {
+                unsafe {
+                    #[cfg(target_arch = "wasm32")]
+                    #[link(wasm_import_module = "component:main/http-resp")]
+                    unsafe extern "C" {
+                        #[link_name = "test"]
+                        fn wit_import0(_: i32);
+                    }
+                    #[cfg(not(target_arch = "wasm32"))]
+                    unsafe extern "C" fn wit_import0(_: i32) {
+                        unreachable!()
+                    }
+                    wit_import0((&x).take_handle() as i32);
+                }
+            }
         }
-      }
-      
-
-      unsafe impl _rt::WasmResource for Res{
-        #[inline]
-        unsafe fn drop(_handle: u32) {
-          
-          #[cfg(target_arch = "wasm32")]
-          #[link(wasm_import_module = "component:main/res")]
-          unsafe extern "C" {
-            #[link_name = "[resource-drop]res"]
-            fn drop(_: i32, );
-          }
-
-          #[cfg(not(target_arch = "wasm32"))]
-          unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
-          unsafe { drop(_handle as i32); }
-        }
-      }
-      
-
     }
-
-  }
 }
+#[rustfmt::skip]
+#[allow(dead_code, clippy::all)]
+pub mod proxy {
+    pub mod recorder {
+        #[allow(dead_code, async_fn_in_trait, unused_imports, clippy::all)]
+        pub mod record {
+            #[used]
+            #[doc(hidden)]
+            static __FORCE_SECTION_REF: fn() = super::super::super::__link_custom_section_describing_imports;
+            use super::super::super::_rt;
+            #[allow(unused_unsafe, clippy::all)]
+            #[allow(async_fn_in_trait)]
+            pub fn record(method: &str, args: &[_rt::String], ret: &str) -> () {
+                unsafe {
+                    let vec0 = method;
+                    let ptr0 = vec0.as_ptr().cast::<u8>();
+                    let len0 = vec0.len();
+                    let vec2 = args;
+                    let len2 = vec2.len();
+                    let layout2 = _rt::alloc::Layout::from_size_align(
+                            vec2.len() * (2 * ::core::mem::size_of::<*const u8>()),
+                            ::core::mem::size_of::<*const u8>(),
+                        )
+                        .unwrap();
+                    let (result2, _cleanup2) = wit_bindgen_rt::Cleanup::new(layout2);
+                    for (i, e) in vec2.into_iter().enumerate() {
+                        let base = result2
+                            .add(i * (2 * ::core::mem::size_of::<*const u8>()));
+                        {
+                            let vec1 = e;
+                            let ptr1 = vec1.as_ptr().cast::<u8>();
+                            let len1 = vec1.len();
+                            *base
+                                .add(::core::mem::size_of::<*const u8>())
+                                .cast::<usize>() = len1;
+                            *base.add(0).cast::<*mut u8>() = ptr1.cast_mut();
+                        }
+                    }
+                    let vec3 = ret;
+                    let ptr3 = vec3.as_ptr().cast::<u8>();
+                    let len3 = vec3.len();
+                    #[cfg(target_arch = "wasm32")]
+                    #[link(wasm_import_module = "proxy:recorder/record@0.1.0")]
+                    unsafe extern "C" {
+                        #[link_name = "record"]
+                        fn wit_import4(
+                            _: *mut u8,
+                            _: usize,
+                            _: *mut u8,
+                            _: usize,
+                            _: *mut u8,
+                            _: usize,
+                        );
+                    }
+                    #[cfg(not(target_arch = "wasm32"))]
+                    unsafe extern "C" fn wit_import4(
+                        _: *mut u8,
+                        _: usize,
+                        _: *mut u8,
+                        _: usize,
+                        _: *mut u8,
+                        _: usize,
+                    ) {
+                        unreachable!()
+                    }
+                    wit_import4(
+                        ptr0.cast_mut(),
+                        len0,
+                        result2,
+                        len2,
+                        ptr3.cast_mut(),
+                        len3,
+                    );
+                }
+            }
+        }
+    }
+}
+#[rustfmt::skip]
 #[allow(dead_code, clippy::all)]
 pub mod exports {
-  pub mod component {
-    pub mod main {
-
-      #[allow(dead_code, async_fn_in_trait, unused_imports, clippy::all)]
-      pub mod res {
-        #[used]
-        #[doc(hidden)]
-        static __FORCE_SECTION_REF: fn() =
-        super::super::super::super::__link_custom_section_describing_imports;
-        
-        use super::super::super::super::_rt;
-
-        #[derive(Debug)]
-        #[repr(transparent)]
-        pub struct Res{
-          handle: _rt::Resource<Res>,
-        }
-
-        type _ResRep<T> = Option<T>;
-
-        impl Res{
-          /// Creates a new resource from the specified representation.
-          ///
-          /// This function will create a new resource handle by moving `val` onto
-          /// the heap and then passing that heap pointer to the component model to
-          /// create a handle. The owned handle is then returned as `Res`.
-          pub fn new<T: GuestRes>(val: T) -> Self {
-            Self::type_guard::<T>();
-            let val: _ResRep<T> = Some(val);
-            let ptr: *mut _ResRep<T> =
-            _rt::Box::into_raw(_rt::Box::new(val));
-            unsafe {
-              Self::from_handle(T::_resource_new(ptr.cast()))
-            }
-          }
-
-          /// Gets access to the underlying `T` which represents this resource.
-          pub fn get<T: GuestRes>(&self) -> &T {
-            let ptr = unsafe { &*self.as_ptr::<T>() };
-            ptr.as_ref().unwrap()
-          }
-
-          /// Gets mutable access to the underlying `T` which represents this
-          /// resource.
-          pub fn get_mut<T: GuestRes>(&mut self) -> &mut T {
-            let ptr = unsafe { &mut *self.as_ptr::<T>() };
-            ptr.as_mut().unwrap()
-          }
-
-          /// Consumes this resource and returns the underlying `T`.
-          pub fn into_inner<T: GuestRes>(self) -> T {
-            let ptr = unsafe { &mut *self.as_ptr::<T>() };
-            ptr.take().unwrap()
-          }
-
-          #[doc(hidden)]
-          pub unsafe fn from_handle(handle: u32) -> Self {
-            Self {
-              handle: unsafe { _rt::Resource::from_handle(handle) },
-            }
-          }
-
-          #[doc(hidden)]
-          pub fn take_handle(&self) -> u32 {
-            _rt::Resource::take_handle(&self.handle)
-          }
-
-          #[doc(hidden)]
-          pub fn handle(&self) -> u32 {
-            _rt::Resource::handle(&self.handle)
-          }
-
-          // It's theoretically possible to implement the `GuestRes` trait twice
-          // so guard against using it with two different types here.
-          #[doc(hidden)]
-          fn type_guard<T: 'static>() {
-            use core::any::TypeId;
-            static mut LAST_TYPE: Option<TypeId> = None;
-            unsafe {
-              assert!(!cfg!(target_feature = "atomics"));
-              let id = TypeId::of::<T>();
-              match LAST_TYPE {
-                Some(ty) => assert!(ty == id, "cannot use two types with this resource type"),
-                None => LAST_TYPE = Some(id),
-              }
-            }
-          }
-
-          #[doc(hidden)]
-          pub unsafe fn dtor<T: 'static>(handle: *mut u8) {
-            Self::type_guard::<T>();
-            let _ = unsafe { _rt::Box::from_raw(handle as *mut _ResRep<T>) };
-          }
-
-          fn as_ptr<T: GuestRes>(&self) -> *mut _ResRep<T> {
-            Res::type_guard::<T>();
-            T::_resource_rep(self.handle()).cast()
-          }
-        }
-
-        /// A borrowed version of [`Res`] which represents a borrowed value
-        /// with the lifetime `'a`.
-        #[derive(Debug)]
-        #[repr(transparent)]
-        pub struct ResBorrow<'a> {
-          rep: *mut u8,
-          _marker: core::marker::PhantomData<&'a Res>,
-        }
-
-        impl<'a> ResBorrow<'a>{
-          #[doc(hidden)]
-          pub unsafe fn lift(rep: usize) -> Self {
-            Self {
-              rep: rep as *mut u8,
-              _marker: core::marker::PhantomData,
-            }
-          }
-
-          /// Gets access to the underlying `T` in this resource.
-          pub fn get<T: GuestRes>(&self) -> &T {
-            let ptr = unsafe { &mut *self.as_ptr::<T>() };
-            ptr.as_ref().unwrap()
-          }
-
-          // NB: mutable access is not allowed due to the component model allowing
-          // multiple borrows of the same resource.
-
-          fn as_ptr<T: 'static>(&self) -> *mut _ResRep<T> {
-            Res::type_guard::<T>();
-            self.rep.cast()
-          }
-        }
-        
-
-        unsafe impl _rt::WasmResource for Res{
-          #[inline]
-          unsafe fn drop(_handle: u32) {
-            
-            #[cfg(target_arch = "wasm32")]
-            #[link(wasm_import_module = "[export]component:main/res")]
-            unsafe extern "C" {
-              #[link_name = "[resource-drop]res"]
-              fn drop(_: i32, );
-            }
-
-            #[cfg(not(target_arch = "wasm32"))]
-            unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-            
-            unsafe { drop(_handle as i32); }
-          }
-        }
-        
-        pub trait Guest {
-          type Res: GuestRes;
-        }
-        pub trait GuestRes: 'static {
-
-          #[doc(hidden)]
-          unsafe fn _resource_new(val: *mut u8) -> u32
-          where Self: Sized
-          {
-            
-            #[cfg(target_arch = "wasm32")]
-            #[link(wasm_import_module = "[export]component:main/res")]
-            unsafe extern "C" {
-              #[link_name = "[resource-new]res"]
-              fn new(_: *mut u8, ) -> i32;
-            }
-
-            #[cfg(not(target_arch = "wasm32"))]
-            unsafe extern "C" fn new(_: *mut u8, ) -> i32 { unreachable!() }
-            
-            unsafe { new(val) as u32 }
-          }
-
-          #[doc(hidden)]
-          fn _resource_rep(handle: u32) -> *mut u8
-          where Self: Sized
-          {
-            
-            #[cfg(target_arch = "wasm32")]
-            #[link(wasm_import_module = "[export]component:main/res")]
-            unsafe extern "C" {
-              #[link_name = "[resource-rep]res"]
-              fn rep(_: i32, ) -> *mut u8;
-            }
-
-            #[cfg(not(target_arch = "wasm32"))]
-            unsafe extern "C" fn rep(_: i32, ) -> *mut u8 { unreachable!() }
-            
-            unsafe { rep(handle as i32) }
-          }
-
-          
-        }
-        #[doc(hidden)]
-
-        macro_rules! __export_component_main_res_cabi{
-          ($ty:ident with_types_in $($path_to_types:tt)*) => (const _: () = {
-
-
-            const _: () = {
-              #[doc(hidden)]
-              #[unsafe(export_name = "component:main/res#[dtor]res")]
-              #[allow(non_snake_case)]
-              unsafe extern "C" fn dtor(rep: *mut u8) {
-                unsafe {
-                  $($path_to_types)*::Res::dtor::<
-                  <$ty as $($path_to_types)*::Guest>::Res
-                  >(rep)
+    pub mod component {
+        pub mod main {
+            #[allow(dead_code, async_fn_in_trait, unused_imports, clippy::all)]
+            pub mod async_io {
+                #[used]
+                #[doc(hidden)]
+                static __FORCE_SECTION_REF: fn() = super::super::super::super::__link_custom_section_describing_imports;
+                use super::super::super::super::_rt;
+                #[derive(Debug)]
+                #[repr(transparent)]
+                pub struct Handle {
+                    handle: _rt::Resource<Handle>,
                 }
-              }
-            };
-            
-          };);
+                type _HandleRep<T> = Option<T>;
+                impl Handle {
+                    /// Creates a new resource from the specified representation.
+                    ///
+                    /// This function will create a new resource handle by moving `val` onto
+                    /// the heap and then passing that heap pointer to the component model to
+                    /// create a handle. The owned handle is then returned as `Handle`.
+                    pub fn new<T: GuestHandle>(val: T) -> Self {
+                        Self::type_guard::<T>();
+                        let val: _HandleRep<T> = Some(val);
+                        let ptr: *mut _HandleRep<T> = _rt::Box::into_raw(
+                            _rt::Box::new(val),
+                        );
+                        unsafe { Self::from_handle(T::_resource_new(ptr.cast())) }
+                    }
+                    /// Gets access to the underlying `T` which represents this resource.
+                    pub fn get<T: GuestHandle>(&self) -> &T {
+                        let ptr = unsafe { &*self.as_ptr::<T>() };
+                        ptr.as_ref().unwrap()
+                    }
+                    /// Gets mutable access to the underlying `T` which represents this
+                    /// resource.
+                    pub fn get_mut<T: GuestHandle>(&mut self) -> &mut T {
+                        let ptr = unsafe { &mut *self.as_ptr::<T>() };
+                        ptr.as_mut().unwrap()
+                    }
+                    /// Consumes this resource and returns the underlying `T`.
+                    pub fn into_inner<T: GuestHandle>(self) -> T {
+                        let ptr = unsafe { &mut *self.as_ptr::<T>() };
+                        ptr.take().unwrap()
+                    }
+                    #[doc(hidden)]
+                    pub unsafe fn from_handle(handle: u32) -> Self {
+                        Self {
+                            handle: unsafe { _rt::Resource::from_handle(handle) },
+                        }
+                    }
+                    #[doc(hidden)]
+                    pub fn take_handle(&self) -> u32 {
+                        _rt::Resource::take_handle(&self.handle)
+                    }
+                    #[doc(hidden)]
+                    pub fn handle(&self) -> u32 {
+                        _rt::Resource::handle(&self.handle)
+                    }
+                    #[doc(hidden)]
+                    fn type_guard<T: 'static>() {
+                        use core::any::TypeId;
+                        static mut LAST_TYPE: Option<TypeId> = None;
+                        unsafe {
+                            assert!(! cfg!(target_feature = "atomics"));
+                            let id = TypeId::of::<T>();
+                            match LAST_TYPE {
+                                Some(ty) => {
+                                    assert!(
+                                        ty == id, "cannot use two types with this resource type"
+                                    )
+                                }
+                                None => LAST_TYPE = Some(id),
+                            }
+                        }
+                    }
+                    #[doc(hidden)]
+                    pub unsafe fn dtor<T: 'static>(handle: *mut u8) {
+                        Self::type_guard::<T>();
+                        let _ = unsafe {
+                            _rt::Box::from_raw(handle as *mut _HandleRep<T>)
+                        };
+                    }
+                    fn as_ptr<T: GuestHandle>(&self) -> *mut _HandleRep<T> {
+                        Handle::type_guard::<T>();
+                        T::_resource_rep(self.handle()).cast()
+                    }
+                }
+                /// A borrowed version of [`Handle`] which represents a borrowed value
+                /// with the lifetime `'a`.
+                #[derive(Debug)]
+                #[repr(transparent)]
+                pub struct HandleBorrow<'a> {
+                    rep: *mut u8,
+                    _marker: core::marker::PhantomData<&'a Handle>,
+                }
+                impl<'a> HandleBorrow<'a> {
+                    #[doc(hidden)]
+                    pub unsafe fn lift(rep: usize) -> Self {
+                        Self {
+                            rep: rep as *mut u8,
+                            _marker: core::marker::PhantomData,
+                        }
+                    }
+                    /// Gets access to the underlying `T` in this resource.
+                    pub fn get<T: GuestHandle>(&self) -> &T {
+                        let ptr = unsafe { &mut *self.as_ptr::<T>() };
+                        ptr.as_ref().unwrap()
+                    }
+                    fn as_ptr<T: 'static>(&self) -> *mut _HandleRep<T> {
+                        Handle::type_guard::<T>();
+                        self.rep.cast()
+                    }
+                }
+                impl<'a> crate::ToImport<'a> for Handle {
+                    type Output = crate::component::main::async_io::Handle;
+                    fn to_import_owned(self) -> Self::Output {
+                        self.into_inner()
+                    }
+                    fn to_import(&'a self) -> &'a Self::Output {
+                        self.get()
+                    }
+                }
+                impl<'a> crate::ToImport<'a> for HandleBorrow<'a> {
+                    type Output = crate::component::main::async_io::Handle;
+                    fn to_import(&'a self) -> &'a Self::Output {
+                        self.get()
+                    }
+                    fn to_import_owned(self) -> Self::Output {
+                        unreachable!()
+                    }
+                }
+                unsafe impl _rt::WasmResource for Handle {
+                    #[inline]
+                    unsafe fn drop(_handle: u32) {
+                        #[cfg(target_arch = "wasm32")]
+                        #[link(wasm_import_module = "[export]component:main/async-io")]
+                        unsafe extern "C" {
+                            #[link_name = "[resource-drop]handle"]
+                            fn drop(_: i32);
+                        }
+                        #[cfg(not(target_arch = "wasm32"))]
+                        unsafe extern "C" fn drop(_: i32) {
+                            unreachable!()
+                        }
+                        unsafe {
+                            drop(_handle as i32);
+                        }
+                    }
+                }
+                pub trait Guest {
+                    type Handle: GuestHandle;
+                }
+                pub trait GuestHandle: 'static {
+                    #[doc(hidden)]
+                    unsafe fn _resource_new(val: *mut u8) -> u32
+                    where
+                        Self: Sized,
+                    {
+                        #[cfg(target_arch = "wasm32")]
+                        #[link(wasm_import_module = "[export]component:main/async-io")]
+                        unsafe extern "C" {
+                            #[link_name = "[resource-new]handle"]
+                            fn new(_: *mut u8) -> i32;
+                        }
+                        #[cfg(not(target_arch = "wasm32"))]
+                        unsafe extern "C" fn new(_: *mut u8) -> i32 {
+                            unreachable!()
+                        }
+                        unsafe { new(val) as u32 }
+                    }
+                    #[doc(hidden)]
+                    fn _resource_rep(handle: u32) -> *mut u8
+                    where
+                        Self: Sized,
+                    {
+                        #[cfg(target_arch = "wasm32")]
+                        #[link(wasm_import_module = "[export]component:main/async-io")]
+                        unsafe extern "C" {
+                            #[link_name = "[resource-rep]handle"]
+                            fn rep(_: i32) -> *mut u8;
+                        }
+                        #[cfg(not(target_arch = "wasm32"))]
+                        unsafe extern "C" fn rep(_: i32) -> *mut u8 {
+                            unreachable!()
+                        }
+                        unsafe { rep(handle as i32) }
+                    }
+                }
+                #[doc(hidden)]
+                macro_rules! __export_component_main_async_io_cabi {
+                    ($ty:ident with_types_in $($path_to_types:tt)*) => {
+                        const _ : () = { const _ : () = { #[doc(hidden)] #[unsafe
+                        (export_name = "component:main/async-io#[dtor]handle")]
+                        #[allow(non_snake_case)] unsafe extern "C" fn dtor(rep : * mut
+                        u8) { unsafe { $($path_to_types)*:: Handle::dtor::< <$ty as
+                        $($path_to_types)*:: Guest >::Handle > (rep) } } }; };
+                    };
+                }
+                #[doc(hidden)]
+                pub(crate) use __export_component_main_async_io_cabi;
+            }
+            #[allow(dead_code, async_fn_in_trait, unused_imports, clippy::all)]
+            pub mod http_body {
+                #[used]
+                #[doc(hidden)]
+                static __FORCE_SECTION_REF: fn() = super::super::super::super::__link_custom_section_describing_imports;
+                use super::super::super::super::_rt;
+                pub type BodyHandle = super::super::super::super::exports::component::main::async_io::Handle;
+                pub type BodyHandleBorrow<'a> = super::super::super::super::exports::component::main::async_io::HandleBorrow<
+                    'a,
+                >;
+                #[doc(hidden)]
+                #[allow(non_snake_case, unused_unsafe)]
+                pub unsafe fn _export_test_cabi<T: Guest>(arg0: i32) {
+                    unsafe {
+                        #[cfg(target_arch = "wasm32")] _rt::run_ctors_once();
+                        {
+                            T::test(
+                                super::super::super::super::exports::component::main::async_io::Handle::from_handle(
+                                    arg0 as u32,
+                                ),
+                            )
+                        };
+                    }
+                }
+                pub trait Guest {
+                    #[allow(async_fn_in_trait)]
+                    fn test(x: BodyHandle) -> ();
+                }
+                #[doc(hidden)]
+                macro_rules! __export_component_main_http_body_cabi {
+                    ($ty:ident with_types_in $($path_to_types:tt)*) => {
+                        const _ : () = { #[unsafe (export_name =
+                        "component:main/http-body#test")] unsafe extern "C" fn
+                        export_test(arg0 : i32,) { unsafe { $($path_to_types)*::
+                        _export_test_cabi::<$ty > (arg0) } } };
+                    };
+                }
+                #[doc(hidden)]
+                pub(crate) use __export_component_main_http_body_cabi;
+            }
+            #[allow(dead_code, async_fn_in_trait, unused_imports, clippy::all)]
+            pub mod http_resp {
+                #[used]
+                #[doc(hidden)]
+                static __FORCE_SECTION_REF: fn() = super::super::super::super::__link_custom_section_describing_imports;
+                use super::super::super::super::_rt;
+                pub type BodyHandle = super::super::super::super::exports::component::main::http_body::BodyHandle;
+                pub type BodyHandleBorrow<'a> = super::super::super::super::exports::component::main::http_body::BodyHandleBorrow<
+                    'a,
+                >;
+                #[doc(hidden)]
+                #[allow(non_snake_case, unused_unsafe)]
+                pub unsafe fn _export_test_cabi<T: Guest>(arg0: i32) {
+                    unsafe {
+                        #[cfg(target_arch = "wasm32")] _rt::run_ctors_once();
+                        {
+                            T::test(
+                                super::super::super::super::exports::component::main::async_io::Handle::from_handle(
+                                    arg0 as u32,
+                                ),
+                            )
+                        };
+                    }
+                }
+                pub trait Guest {
+                    #[allow(async_fn_in_trait)]
+                    fn test(x: BodyHandle) -> ();
+                }
+                #[doc(hidden)]
+                macro_rules! __export_component_main_http_resp_cabi {
+                    ($ty:ident with_types_in $($path_to_types:tt)*) => {
+                        const _ : () = { #[unsafe (export_name =
+                        "component:main/http-resp#test")] unsafe extern "C" fn
+                        export_test(arg0 : i32,) { unsafe { $($path_to_types)*::
+                        _export_test_cabi::<$ty > (arg0) } } };
+                    };
+                }
+                #[doc(hidden)]
+                pub(crate) use __export_component_main_http_resp_cabi;
+            }
+        }
+    }
+}
+#[rustfmt::skip]
+mod _rt {
+    #![allow(dead_code, clippy::all)]
+    pub use alloc_crate::string::String;
+    impl crate::ToExport for String {
+        type Output = String;
+        fn to_export(self) -> Self::Output {
+            self
+        }
+    }
+    pub use alloc_crate::alloc;
+    use core::fmt;
+    use core::marker;
+    use core::sync::atomic::{AtomicU32, Ordering::Relaxed};
+    /// A type which represents a component model resource, either imported or
+    /// exported into this component.
+    ///
+    /// This is a low-level wrapper which handles the lifetime of the resource
+    /// (namely this has a destructor). The `T` provided defines the component model
+    /// intrinsics that this wrapper uses.
+    ///
+    /// One of the chief purposes of this type is to provide `Deref` implementations
+    /// to access the underlying data when it is owned.
+    ///
+    /// This type is primarily used in generated code for exported and imported
+    /// resources.
+    #[repr(transparent)]
+    pub struct Resource<T: WasmResource> {
+        handle: AtomicU32,
+        _marker: marker::PhantomData<T>,
+    }
+    /// A trait which all wasm resources implement, namely providing the ability to
+    /// drop a resource.
+    ///
+    /// This generally is implemented by generated code, not user-facing code.
+    #[allow(clippy::missing_safety_doc)]
+    pub unsafe trait WasmResource {
+        /// Invokes the `[resource-drop]...` intrinsic.
+        unsafe fn drop(handle: u32);
+    }
+    impl<T: WasmResource> Resource<T> {
+        #[doc(hidden)]
+        pub unsafe fn from_handle(handle: u32) -> Self {
+            debug_assert!(handle != 0 && handle != u32::MAX);
+            Self {
+                handle: AtomicU32::new(handle),
+                _marker: marker::PhantomData,
+            }
+        }
+        /// Takes ownership of the handle owned by `resource`.
+        ///
+        /// Note that this ideally would be `into_handle` taking `Resource<T>` by
+        /// ownership. The code generator does not enable that in all situations,
+        /// unfortunately, so this is provided instead.
+        ///
+        /// Also note that `take_handle` is in theory only ever called on values
+        /// owned by a generated function. For example a generated function might
+        /// take `Resource<T>` as an argument but then call `take_handle` on a
+        /// reference to that argument. In that sense the dynamic nature of
+        /// `take_handle` should only be exposed internally to generated code, not
+        /// to user code.
+        #[doc(hidden)]
+        pub fn take_handle(resource: &Resource<T>) -> u32 {
+            resource.handle.swap(u32::MAX, Relaxed)
         }
         #[doc(hidden)]
-        pub(crate) use __export_component_main_res_cabi;
-
-      }
-
-    }
-  }
-}
-mod _rt {
-  #![allow(dead_code, clippy::all)]
-
-
-  use core::fmt;
-  use core::marker;
-  use core::sync::atomic::{AtomicU32, Ordering::Relaxed};
-
-  /// A type which represents a component model resource, either imported or
-  /// exported into this component.
-  ///
-  /// This is a low-level wrapper which handles the lifetime of the resource
-  /// (namely this has a destructor). The `T` provided defines the component model
-  /// intrinsics that this wrapper uses.
-  ///
-  /// One of the chief purposes of this type is to provide `Deref` implementations
-  /// to access the underlying data when it is owned.
-  ///
-  /// This type is primarily used in generated code for exported and imported
-  /// resources.
-  #[repr(transparent)]
-  pub struct Resource<T: WasmResource> {
-    // NB: This would ideally be `u32` but it is not. The fact that this has
-    // interior mutability is not exposed in the API of this type except for the
-    // `take_handle` method which is supposed to in theory be private.
-    //
-    // This represents, almost all the time, a valid handle value. When it's
-    // invalid it's stored as `u32::MAX`.
-    handle: AtomicU32,
-    _marker: marker::PhantomData<T>,
-  }
-
-  /// A trait which all wasm resources implement, namely providing the ability to
-  /// drop a resource.
-  ///
-  /// This generally is implemented by generated code, not user-facing code.
-  #[allow(clippy::missing_safety_doc)]
-  pub unsafe trait WasmResource {
-    /// Invokes the `[resource-drop]...` intrinsic.
-    unsafe fn drop(handle: u32);
-  }
-
-  impl<T: WasmResource> Resource<T> {
-    #[doc(hidden)]
-    pub unsafe fn from_handle(handle: u32) -> Self {
-      debug_assert!(handle != 0 && handle != u32::MAX);
-      Self {
-        handle: AtomicU32::new(handle),
-        _marker: marker::PhantomData,
-      }
-    }
-
-    /// Takes ownership of the handle owned by `resource`.
-    ///
-    /// Note that this ideally would be `into_handle` taking `Resource<T>` by
-    /// ownership. The code generator does not enable that in all situations,
-    /// unfortunately, so this is provided instead.
-    ///
-    /// Also note that `take_handle` is in theory only ever called on values
-    /// owned by a generated function. For example a generated function might
-    /// take `Resource<T>` as an argument but then call `take_handle` on a
-    /// reference to that argument. In that sense the dynamic nature of
-    /// `take_handle` should only be exposed internally to generated code, not
-    /// to user code.
-    #[doc(hidden)]
-    pub fn take_handle(resource: &Resource<T>) -> u32 {
-      resource.handle.swap(u32::MAX, Relaxed)
-    }
-
-    #[doc(hidden)]
-    pub fn handle(resource: &Resource<T>) -> u32 {
-      resource.handle.load(Relaxed)
-    }
-  }
-
-  impl<T: WasmResource> fmt::Debug for Resource<T> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-      f.debug_struct("Resource")
-      .field("handle", &self.handle)
-      .finish()
-    }
-  }
-
-  impl<T: WasmResource> Drop for Resource<T> {
-    fn drop(&mut self) {
-      unsafe {
-        match self.handle.load(Relaxed) {
-          // If this handle was "taken" then don't do anything in the
-          // destructor.
-          u32::MAX => {}
-
-          // ... but otherwise do actually destroy it with the imported
-          // component model intrinsic as defined through `T`.
-          other => T::drop(other),
+        pub fn handle(resource: &Resource<T>) -> u32 {
+            resource.handle.load(Relaxed)
         }
-      }
     }
-  }
-  pub use alloc_crate::boxed::Box;
-  extern crate alloc as alloc_crate;
+    impl<T: WasmResource> fmt::Debug for Resource<T> {
+        fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+            f.debug_struct("Resource").field("handle", &self.handle).finish()
+        }
+    }
+    impl<T: WasmResource> Drop for Resource<T> {
+        fn drop(&mut self) {
+            unsafe {
+                match self.handle.load(Relaxed) {
+                    u32::MAX => {}
+                    other => T::drop(other),
+                }
+            }
+        }
+    }
+    pub use alloc_crate::boxed::Box;
+    impl<T> crate::ToExport for Box<T>
+    where
+        T: crate::ToExport + Clone,
+    {
+        type Output = Box<T::Output>;
+        fn to_export(self) -> Self::Output {
+            Box::new((*self).clone().to_export())
+        }
+    }
+    #[cfg(target_arch = "wasm32")]
+    pub fn run_ctors_once() {
+        wit_bindgen_rt::run_ctors_once();
+    }
+    extern crate alloc as alloc_crate;
 }
-
 /// Generates `#[unsafe(no_mangle)]` functions to export the specified type as
 /// the root implementation of all generated traits.
 ///
@@ -415,34 +622,119 @@ mod _rt {
 /// ```
 #[allow(unused_macros)]
 #[doc(hidden)]
-
 macro_rules! __export_imports_impl {
-  ($ty:ident) => (self::export!($ty with_types_in self););
-  ($ty:ident with_types_in $($path_to_types_root:tt)*) => (
-  $($path_to_types_root)*::exports::component::main::res::__export_component_main_res_cabi!($ty with_types_in $($path_to_types_root)*::exports::component::main::res);
-  )
+    ($ty:ident) => {
+        self::export!($ty with_types_in self);
+    };
+    ($ty:ident with_types_in $($path_to_types_root:tt)*) => {
+        $($path_to_types_root)*::
+        exports::component::main::async_io::__export_component_main_async_io_cabi!($ty
+        with_types_in $($path_to_types_root)*:: exports::component::main::async_io);
+        $($path_to_types_root)*::
+        exports::component::main::http_body::__export_component_main_http_body_cabi!($ty
+        with_types_in $($path_to_types_root)*:: exports::component::main::http_body);
+        $($path_to_types_root)*::
+        exports::component::main::http_resp::__export_component_main_http_resp_cabi!($ty
+        with_types_in $($path_to_types_root)*:: exports::component::main::http_resp);
+    };
 }
 #[doc(inline)]
 pub(crate) use __export_imports_impl as export;
 export!(Stub);
-
+#[allow(dead_code)]
+trait ToExport {
+    type Output;
+    fn to_export(self) -> Self::Output;
+}
+#[allow(dead_code)]
+trait ToImport<'a> {
+    type Output;
+    fn to_import(&'a self) -> &'a Self::Output;
+    fn to_import_owned(self) -> Self::Output;
+}
+impl<Ok, Err> ToExport for Result<Ok, Err>
+where
+    Ok: ToExport,
+    Err: ToExport,
+{
+    type Output = Result<Ok::Output, Err::Output>;
+    fn to_export(self) -> Self::Output {
+        match self {
+            Ok(ok) => Ok(ok.to_export()),
+            Err(err) => Err(err.to_export()),
+        }
+    }
+}
+impl<Inner> ToExport for Option<Inner>
+where
+    Inner: ToExport,
+{
+    type Output = Option<Inner::Output>;
+    fn to_export(self) -> Self::Output {
+        self.map(|x| x.to_export())
+    }
+}
+macro_rules! impl_to_import_export_for_primitive {
+    ($($t:ty),*) => {
+        $(impl <'a > ToImport <'a > for $t { type Output = $t; fn to_import(&'a self) ->
+        &'a Self::Output { self } fn to_import_owned(self) -> Self::Output { self } }
+        impl ToExport for $t { type Output = $t; fn to_export(self) -> Self::Output {
+        self } })*
+    };
+}
+impl_to_import_export_for_primitive!(
+    u8, u16, u32, u64, i8, i16, i32, i64, f32, f64, (), bool, char
+);
+macro_rules! impl_to_import_export_for_tuple {
+    ($($T:ident, $i:tt),*) => {
+        impl <$($T : ToExport),*> ToExport for ($($T,)*) { type Output = ($($T
+        ::Output,)*); fn to_export(self) -> Self::Output { ($(self.$i .to_export(),)*) }
+        }
+    };
+}
+impl_to_import_export_for_tuple!(T0, 0);
+impl_to_import_export_for_tuple!(T0, 0, T1, 1);
+impl_to_import_export_for_tuple!(T0, 0, T1, 1, T2, 2);
+impl_to_import_export_for_tuple!(T0, 0, T1, 1, T2, 2, T3, 3);
+impl_to_import_export_for_tuple!(T0, 0, T1, 1, T2, 2, T3, 3, T4, 4);
+impl_to_import_export_for_tuple!(T0, 0, T1, 1, T2, 2, T3, 3, T4, 4, T5, 5);
+impl_to_import_export_for_tuple!(T0, 0, T1, 1, T2, 2, T3, 3, T4, 4, T5, 5, T6, 6);
+trait ToWave {
+    fn to_wave_string(&self) -> String
+    where
+        Self: std::fmt::Debug,
+    {
+        format!("{self:?}")
+    }
+}
+impl<T: std::fmt::Debug> ToWave for T {}
+#[rustfmt::skip]
 #[cfg(target_arch = "wasm32")]
-#[unsafe(link_section = "component-type:wit-bindgen:0.43.0:component:main:imports:encoded world")]
+#[unsafe(
+    link_section = "component-type:wit-bindgen:0.43.0:component:main:imports:encoded world"
+)]
 #[doc(hidden)]
 #[allow(clippy::octal_escapes)]
-pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 226] = *b"\
-\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07e\x01A\x02\x01A\x04\x01\
-B\x01\x04\0\x03res\x03\x01\x03\0\x12component:main/res\x05\0\x01B\x01\x04\0\x03r\
-es\x03\x01\x04\0\x12component:main/res\x05\x01\x04\0\x16component:main/imports\x04\
-\0\x0b\x0d\x01\0\x07imports\x03\0\0\0G\x09producers\x01\x0cprocessed-by\x02\x0dw\
-it-component\x070.235.0\x10wit-bindgen-rust\x060.43.0";
-
+pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 639] = *b"\
+\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\x81\x04\x01A\x02\x01\
+A\x10\x01B\x03\x01ps\x01@\x03\x06methods\x04args\0\x03rets\x01\0\x04\0\x06record\
+\x01\x01\x03\0\x1bproxy:recorder/record@0.1.0\x05\0\x01B\x01\x04\0\x06handle\x03\
+\x01\x03\0\x17component:main/async-io\x05\x01\x02\x03\0\x01\x06handle\x01B\x05\x02\
+\x03\x02\x01\x02\x04\0\x0bbody-handle\x03\0\0\x01i\x01\x01@\x01\x01x\x02\x01\0\x04\
+\0\x04test\x01\x03\x03\0\x18component:main/http-body\x05\x03\x02\x03\0\x02\x0bbo\
+dy-handle\x01B\x05\x02\x03\x02\x01\x04\x04\0\x0bbody-handle\x03\0\0\x01i\x01\x01\
+@\x01\x01x\x02\x01\0\x04\0\x04test\x01\x03\x03\0\x18component:main/http-resp\x05\
+\x05\x01B\x01\x04\0\x06handle\x03\x01\x04\0\x17component:main/async-io\x05\x06\x01\
+B\x05\x02\x03\x02\x01\x02\x04\0\x0bbody-handle\x03\0\0\x01i\x01\x01@\x01\x01x\x02\
+\x01\0\x04\0\x04test\x01\x03\x04\0\x18component:main/http-body\x05\x07\x01B\x05\x02\
+\x03\x02\x01\x04\x04\0\x0bbody-handle\x03\0\0\x01i\x01\x01@\x01\x01x\x02\x01\0\x04\
+\0\x04test\x01\x03\x04\0\x18component:main/http-resp\x05\x08\x04\0\x16component:\
+main/imports\x04\0\x0b\x0d\x01\0\x07imports\x03\0\0\0G\x09producers\x01\x0cproce\
+ssed-by\x02\x0dwit-component\x070.235.0\x10wit-bindgen-rust\x060.43.0";
 #[inline(never)]
 #[doc(hidden)]
 pub fn __link_custom_section_describing_imports() {
-  wit_bindgen_rt::maybe_link_cabi_realloc();
+    wit_bindgen_rt::maybe_link_cabi_realloc();
 }
-
-
 #[derive(Debug)]
 pub struct Stub;

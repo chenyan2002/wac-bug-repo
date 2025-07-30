@@ -1,9 +1,9 @@
-wit-bindgen rust --stubs wit --world imports --runtime-path wit_bindgen_rt
-wit-bindgen rust --stubs wit --world root --runtime-path wit_bindgen_rt
-cp imports.rs virt/src/lib.rs
-cp root.rs main/src/lib.rs
-rm imports.rs
-rm root.rs
+#wit-bindgen rust --stubs wit --world imports --runtime-path wit_bindgen_rt
+#wit-bindgen rust --stubs wit --world root --runtime-path wit_bindgen_rt
+#cp imports.rs virt/src/lib.rs
+#cp root.rs main/src/lib.rs
+#rm imports.rs
+#rm root.rs
 
 cargo build --target=wasm32-unknown-unknown
 pushd target/wasm32-unknown-unknown/debug

@@ -1,21 +1,37 @@
 package component:main;
 
-interface res {
-  resource res;
+interface async-io {
+  resource handle;
+}
+
+interface http-body {
+  use async-io.{handle as body-handle};
+  test: func(x: body-handle);
+}
+
+interface http-resp {
+  use http-body.{body-handle};
+  test: func(x: body-handle);
 }
 
 interface main {
-  use res.{res};
-  test: func(x: res);
+  use http-body.{body-handle};
+  test: func(x: body-handle);
 }
 
 world root {
-  import res;
+  import async-io;
+  import http-body;
+  import http-resp;
   export main;
 }
 
 world imports {
-  import res;
-  export res;
+  import proxy:recorder/%record@0.1.0;
+  import async-io;
+  import http-body;
+  import http-resp;
+  export async-io;
+  export http-body;
+  export http-resp;
 }
-

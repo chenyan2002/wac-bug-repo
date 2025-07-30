@@ -5,14 +5,14 @@
 impl exports::component::main::main::Guest for Stub {
   #[allow(unused_variables)]
   #[allow(async_fn_in_trait)]
-  fn test(x: exports::component::main::main::Res,) -> (){ unreachable!() }
+  fn test(x: exports::component::main::main::BodyHandle,) -> (){ unreachable!() }
 }
 #[allow(dead_code, clippy::all)]
 pub mod component {
   pub mod main {
 
     #[allow(dead_code, async_fn_in_trait, unused_imports, clippy::all)]
-    pub mod res {
+    pub mod async_io {
       #[used]
       #[doc(hidden)]
       static __FORCE_SECTION_REF: fn() =
@@ -22,11 +22,11 @@ pub mod component {
 
       #[derive(Debug)]
       #[repr(transparent)]
-      pub struct Res{
-        handle: _rt::Resource<Res>,
+      pub struct Handle{
+        handle: _rt::Resource<Handle>,
       }
 
-      impl Res{
+      impl Handle{
         #[doc(hidden)]
         pub unsafe fn from_handle(handle: u32) -> Self {
           Self {
@@ -46,14 +46,14 @@ pub mod component {
       }
       
 
-      unsafe impl _rt::WasmResource for Res{
+      unsafe impl _rt::WasmResource for Handle{
         #[inline]
         unsafe fn drop(_handle: u32) {
           
           #[cfg(target_arch = "wasm32")]
-          #[link(wasm_import_module = "component:main/res")]
+          #[link(wasm_import_module = "component:main/async-io")]
           unsafe extern "C" {
-            #[link_name = "[resource-drop]res"]
+            #[link_name = "[resource-drop]handle"]
             fn drop(_: i32, );
           }
 
@@ -64,6 +64,64 @@ pub mod component {
         }
       }
       
+
+    }
+
+
+    #[allow(dead_code, async_fn_in_trait, unused_imports, clippy::all)]
+    pub mod http_body {
+      #[used]
+      #[doc(hidden)]
+      static __FORCE_SECTION_REF: fn() =
+      super::super::super::__link_custom_section_describing_imports;
+      
+      pub type BodyHandle = super::super::super::component::main::async_io::Handle;
+      #[allow(unused_unsafe, clippy::all)]
+      #[allow(async_fn_in_trait)]
+      pub fn test(x: BodyHandle,) -> (){
+        unsafe {
+
+          #[cfg(target_arch = "wasm32")]
+          #[link(wasm_import_module = "component:main/http-body")]
+          unsafe extern "C" {
+            #[link_name = "test"]
+            fn wit_import0(_: i32, );
+          }
+
+          #[cfg(not(target_arch = "wasm32"))]
+          unsafe extern "C" fn wit_import0(_: i32, ) { unreachable!() }
+          wit_import0((&x).take_handle() as i32);
+        }
+      }
+
+    }
+
+
+    #[allow(dead_code, async_fn_in_trait, unused_imports, clippy::all)]
+    pub mod http_resp {
+      #[used]
+      #[doc(hidden)]
+      static __FORCE_SECTION_REF: fn() =
+      super::super::super::__link_custom_section_describing_imports;
+      
+      pub type BodyHandle = super::super::super::component::main::http_body::BodyHandle;
+      #[allow(unused_unsafe, clippy::all)]
+      #[allow(async_fn_in_trait)]
+      pub fn test(x: BodyHandle,) -> (){
+        unsafe {
+
+          #[cfg(target_arch = "wasm32")]
+          #[link(wasm_import_module = "component:main/http-resp")]
+          unsafe extern "C" {
+            #[link_name = "test"]
+            fn wit_import0(_: i32, );
+          }
+
+          #[cfg(not(target_arch = "wasm32"))]
+          unsafe extern "C" fn wit_import0(_: i32, ) { unreachable!() }
+          wit_import0((&x).take_handle() as i32);
+        }
+      }
 
     }
 
@@ -82,17 +140,17 @@ pub mod exports {
         super::super::super::super::__link_custom_section_describing_imports;
         
         use super::super::super::super::_rt;
-        pub type Res = super::super::super::super::component::main::res::Res;
+        pub type BodyHandle = super::super::super::super::component::main::http_body::BodyHandle;
         #[doc(hidden)]
         #[allow(non_snake_case, unused_unsafe)]
         pub unsafe fn _export_test_cabi<T: Guest>(arg0: i32,) { unsafe {#[cfg(target_arch="wasm32")]
         _rt::run_ctors_once();{
-          T::test(super::super::super::super::component::main::res::Res::from_handle(arg0 as u32))
+          T::test(super::super::super::super::component::main::async_io::Handle::from_handle(arg0 as u32))
         };
       } }
       pub trait Guest {
         #[allow(async_fn_in_trait)]
-        fn test(x: Res,) -> ();
+        fn test(x: BodyHandle,) -> ();
       }
       #[doc(hidden)]
 
@@ -251,13 +309,18 @@ export!(Stub);
 #[unsafe(link_section = "component-type:wit-bindgen:0.43.0:component:main:root:encoded world")]
 #[doc(hidden)]
 #[allow(clippy::octal_escapes)]
-pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 256] = *b"\
-\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\x85\x01\x01A\x02\x01\
-A\x05\x01B\x01\x04\0\x03res\x03\x01\x03\0\x12component:main/res\x05\0\x02\x03\0\0\
-\x03res\x01B\x05\x02\x03\x02\x01\x01\x04\0\x03res\x03\0\0\x01i\x01\x01@\x01\x01x\
-\x02\x01\0\x04\0\x04test\x01\x03\x04\0\x13component:main/main\x05\x02\x04\0\x13c\
-omponent:main/root\x04\0\x0b\x0a\x01\0\x04root\x03\0\0\0G\x09producers\x01\x0cpr\
-ocessed-by\x02\x0dwit-component\x070.235.0\x10wit-bindgen-rust\x060.43.0";
+pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 439] = *b"\
+\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xbc\x02\x01A\x02\x01\
+A\x0a\x01B\x01\x04\0\x06handle\x03\x01\x03\0\x17component:main/async-io\x05\0\x02\
+\x03\0\0\x06handle\x01B\x05\x02\x03\x02\x01\x01\x04\0\x0bbody-handle\x03\0\0\x01\
+i\x01\x01@\x01\x01x\x02\x01\0\x04\0\x04test\x01\x03\x03\0\x18component:main/http\
+-body\x05\x02\x02\x03\0\x01\x0bbody-handle\x01B\x05\x02\x03\x02\x01\x03\x04\0\x0b\
+body-handle\x03\0\0\x01i\x01\x01@\x01\x01x\x02\x01\0\x04\0\x04test\x01\x03\x03\0\
+\x18component:main/http-resp\x05\x04\x01B\x05\x02\x03\x02\x01\x03\x04\0\x0bbody-\
+handle\x03\0\0\x01i\x01\x01@\x01\x01x\x02\x01\0\x04\0\x04test\x01\x03\x04\0\x13c\
+omponent:main/main\x05\x05\x04\0\x13component:main/root\x04\0\x0b\x0a\x01\0\x04r\
+oot\x03\0\0\0G\x09producers\x01\x0cprocessed-by\x02\x0dwit-component\x070.235.0\x10\
+wit-bindgen-rust\x060.43.0";
 
 #[inline(never)]
 #[doc(hidden)]
