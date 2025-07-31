@@ -1,5 +1,5 @@
 [workspace]
-members = ["main", "virt"]
+members = ["main", "virt", "exports"]
 resolver = "2"
 
 [workspace.dependencies]

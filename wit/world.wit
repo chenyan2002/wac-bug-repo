@@ -35,3 +35,13 @@ world imports {
   export http-body;
   export http-resp;
 }
+
+world exports {
+  import proxy:recorder/%record@0.1.0;
+  import async-io;
+  import http-body;
+  import http-resp;
+  import main;
+  export main;  
+}
+

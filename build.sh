@@ -11,6 +11,8 @@ wasm-tools component embed ../../../wit --world root main.wasm -o main.wasm
 wasm-tools component new main.wasm -o main.wasm
 wasm-tools component embed ../../../wit --world imports virt.wasm -o virt.wasm
 wasm-tools component new virt.wasm -o virt.wasm
-wac compose --dep virt:imports=./virt.wasm --dep root:component=./main.wasm ../../../compose.wac -o composed.wasm
+wasm-tools component embed ../../../wit --world exports exports.wasm -o exports.wasm
+wasm-tools component new exports.wasm -o exports.wasm
+wac compose --dep virt:imports=./virt.wasm --dep virt:exports=./exports.wasm --dep root:component=./main.wasm ../../../compose.wac -o composed.wasm
 popd
 
