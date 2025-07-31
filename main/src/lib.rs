@@ -5,7 +5,11 @@
 impl exports::component::main::main::Guest for Stub {
   #[allow(unused_variables)]
   #[allow(async_fn_in_trait)]
-  fn test(x: exports::component::main::main::BodyHandle,) -> (){ unreachable!() }
+  fn test(x: exports::component::main::main::BodyHandle,) -> () { 
+    let _ = component::main::http_resp::test(x);
+    let instance = unsafe { component::main::http_body::BodyHandle::from_handle(0) };
+    let _ = component::main::http_body::test(instance);
+  }
 }
 #[allow(dead_code, clippy::all)]
 pub mod component {
