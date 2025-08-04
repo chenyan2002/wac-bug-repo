@@ -2,7 +2,7 @@ package composed:component;
 
 let imports = new virt:imports { ... };
 let main = new root:component { ...imports };
-let final = new virt:exports { main: main.main, ... };
+let final = new virt:exports { ...main, ...imports, ... };
 export imports...;
 export main...;
 
