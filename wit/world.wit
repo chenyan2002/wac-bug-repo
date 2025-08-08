@@ -24,10 +24,23 @@ world imports {
   export io;
 }
 
+interface host-io {
+  resource handle {
+    get: static func() -> handle;
+    write: func(x: string);
+  }
+}
+interface outer-main {
+  use host-io.{handle};
+  test1: func();
+  test2: func(h: handle);
+}
+
 world exports {
   import proxy:recorder/%record@0.1.0;
   import io;
+  import host-io;
   import main;
-  export main;
+  export outer-main;
 }
 

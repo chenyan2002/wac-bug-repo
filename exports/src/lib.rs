@@ -3,7 +3,7 @@
 //   * stubs
 //   * runtime_path: "wit_bindgen_rt"
 //   * proxy_component: import
-impl exports::component::main::main::Guest for Stub {
+impl exports::component::main::outer_main::Guest for Stub {
     #[allow(unused_variables)]
     #[allow(async_fn_in_trait)]
     fn test1() -> () {
@@ -14,12 +14,13 @@ impl exports::component::main::main::Guest for Stub {
     }
     #[allow(unused_variables)]
     #[allow(async_fn_in_trait)]
-    fn test2(h: exports::component::main::main::Handle) -> () {
+    fn test2(h: exports::component::main::outer_main::Handle) -> () {
         use crate::ToWave;
         let mut params: Vec<String> = Vec::new();
         params.push(h.to_wave_string());
         proxy::recorder::record::record("test2", &params, "");
-        let res = crate::component::main::main::test2(h.to_import_owned());
+        let new_h = unsafe { component::main::io::Handle::from_handle(h.take_handle()) };
+        let res = crate::component::main::main::test2(new_h/*.to_import_owned()*/);
         proxy::recorder::record::record("test2", &[], &res.to_wave_string());
     }
 }
@@ -124,6 +125,111 @@ pub mod component {
                 }
             }
         }
+    #[allow(dead_code, async_fn_in_trait, unused_imports, clippy::all)]
+    pub mod host_io {
+      #[used]
+      #[doc(hidden)]
+      static __FORCE_SECTION_REF: fn() =
+      super::super::super::__link_custom_section_describing_imports;
+
+      use super::super::super::_rt;
+
+      #[derive(Debug)]
+      #[repr(transparent)]
+      pub struct Handle{
+        handle: _rt::Resource<Handle>,
+      }
+
+      impl Handle{
+        #[doc(hidden)]
+        pub unsafe fn from_handle(handle: u32) -> Self {
+          Self {
+            handle: unsafe { _rt::Resource::from_handle(handle) },
+          }
+        }
+
+        #[doc(hidden)]
+        pub fn take_handle(&self) -> u32 {
+          _rt::Resource::take_handle(&self.handle)
+        }
+
+        #[doc(hidden)]
+        pub fn handle(&self) -> u32 {
+          _rt::Resource::handle(&self.handle)
+        }
+      }
+        impl<'a> crate::ToImport<'a> for Handle {
+                type Output = Self;
+                fn to_import(&'a self) -> &'a Self::Output {
+                    self
+                }
+                fn to_import_owned(self) -> Self::Output {
+                    self
+                }
+        }        
+
+
+      unsafe impl _rt::WasmResource for Handle{
+        #[inline]
+        unsafe fn drop(_handle: u32) {
+
+          #[cfg(target_arch = "wasm32")]
+          #[link(wasm_import_module = "component:main/host-io")]
+          unsafe extern "C" {
+            #[link_name = "[resource-drop]handle"]
+            fn drop(_: i32, );
+          }
+          #[cfg(not(target_arch = "wasm32"))]
+          unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
+
+          unsafe { drop(_handle as i32); }
+        }
+      }
+
+      impl Handle {
+        #[allow(unused_unsafe, clippy::all)]
+        #[allow(async_fn_in_trait)]
+        pub fn get() -> Handle{
+          unsafe {
+
+            #[cfg(target_arch = "wasm32")]
+            #[link(wasm_import_module = "component:main/host-io")]
+            unsafe extern "C" {
+              #[link_name = "[static]handle.get"]
+              fn wit_import0() -> i32;
+            }
+
+            #[cfg(not(target_arch = "wasm32"))]
+            unsafe extern "C" fn wit_import0() -> i32 { unreachable!() }
+            let ret = wit_import0();
+            Handle::from_handle(ret as u32)
+          }
+        }
+      }
+      impl Handle {
+        #[allow(unused_unsafe, clippy::all)]
+        #[allow(async_fn_in_trait)]
+        pub fn write(&self,x: &str,) -> (){
+          unsafe {
+            let vec0 = x;
+            let ptr0 = vec0.as_ptr().cast::<u8>();
+            let len0 = vec0.len();
+
+            #[cfg(target_arch = "wasm32")]
+            #[link(wasm_import_module = "component:main/host-io")]
+            unsafe extern "C" {
+              #[link_name = "[method]handle.write"]
+              fn wit_import1(_: i32, _: *mut u8, _: usize, );
+            }
+
+            #[cfg(not(target_arch = "wasm32"))]
+            unsafe extern "C" fn wit_import1(_: i32, _: *mut u8, _: usize, ) { unreachable!() }
+            wit_import1((self).handle() as i32, ptr0.cast_mut(), len0);
+          }
+        }
+      }
+
+    }
         #[allow(dead_code, async_fn_in_trait, unused_imports, clippy::all)]
         pub mod main {
             #[used]
@@ -251,12 +357,12 @@ pub mod exports {
     pub mod component {
         pub mod main {
             #[allow(dead_code, async_fn_in_trait, unused_imports, clippy::all)]
-            pub mod main {
+            pub mod outer_main {
                 #[used]
                 #[doc(hidden)]
                 static __FORCE_SECTION_REF: fn() = super::super::super::super::__link_custom_section_describing_imports;
                 use super::super::super::super::_rt;
-                pub type Handle = super::super::super::super::component::main::io::Handle;
+                pub type Handle = super::super::super::super::component::main::host_io::Handle;
                 #[doc(hidden)]
                 #[allow(non_snake_case, unused_unsafe)]
                 pub unsafe fn _export_test1_cabi<T: Guest>() {
@@ -272,7 +378,7 @@ pub mod exports {
                         #[cfg(target_arch = "wasm32")] _rt::run_ctors_once();
                         {
                             T::test2(
-                                super::super::super::super::component::main::io::Handle::from_handle(
+                                super::super::super::super::component::main::host_io::Handle::from_handle(
                                     arg0 as u32,
                                 ),
                             )
@@ -286,18 +392,18 @@ pub mod exports {
                     fn test2(h: Handle) -> ();
                 }
                 #[doc(hidden)]
-                macro_rules! __export_component_main_main_cabi {
+                macro_rules! __export_component_main_outer_main_cabi {
                     ($ty:ident with_types_in $($path_to_types:tt)*) => {
                         const _ : () = { #[unsafe (export_name =
-                        "component:main/main#test1")] unsafe extern "C" fn export_test1()
+                        "component:main/outer-main#test1")] unsafe extern "C" fn export_test1()
                         { unsafe { $($path_to_types)*:: _export_test1_cabi::<$ty > () } }
-                        #[unsafe (export_name = "component:main/main#test2")] unsafe
+                        #[unsafe (export_name = "component:main/outer-main#test2")] unsafe
                         extern "C" fn export_test2(arg0 : i32,) { unsafe {
                         $($path_to_types)*:: _export_test2_cabi::<$ty > (arg0) } } };
                     };
                 }
                 #[doc(hidden)]
-                pub(crate) use __export_component_main_main_cabi;
+                pub(crate) use __export_component_main_outer_main_cabi;
             }
         }
     }
@@ -412,14 +518,10 @@ mod _rt {
 #[allow(unused_macros)]
 #[doc(hidden)]
 macro_rules! __export_exports_impl {
-    ($ty:ident) => {
-        self::export!($ty with_types_in self);
-    };
-    ($ty:ident with_types_in $($path_to_types_root:tt)*) => {
-        $($path_to_types_root)*::
-        exports::component::main::main::__export_component_main_main_cabi!($ty
-        with_types_in $($path_to_types_root)*:: exports::component::main::main);
-    };
+  ($ty:ident) => (self::export!($ty with_types_in self););
+  ($ty:ident with_types_in $($path_to_types_root:tt)*) => (
+  $($path_to_types_root)*::exports::component::main::outer_main::__export_component_main_outer_main_cabi!($ty with_types_in $($path_to_types_root)*::exports::component::main::outer_main);
+  )
 }
 #[doc(inline)]
 pub(crate) use __export_exports_impl as export;
@@ -498,20 +600,22 @@ impl<T: std::fmt::Debug> ToWave for T {}
 )]
 #[doc(hidden)]
 #[allow(clippy::octal_escapes)]
-pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 512] = *b"\
-\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\x82\x03\x01A\x02\x01\
-A\x09\x01B\x03\x01ps\x01@\x03\x06methods\x04args\0\x03rets\x01\0\x04\0\x06record\
+pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 643] = *b"\
+\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\x85\x04\x01A\x02\x01\
+A\x0c\x01B\x03\x01ps\x01@\x03\x06methods\x04args\0\x03rets\x01\0\x04\0\x06record\
 \x01\x01\x03\0\x1bproxy:recorder/record@0.1.0\x05\0\x01B\x07\x04\0\x06handle\x03\
 \x01\x01i\0\x01@\0\0\x01\x04\0\x12[static]handle.get\x01\x02\x01h\0\x01@\x02\x04\
 self\x03\x01xs\x01\0\x04\0\x14[method]handle.write\x01\x04\x03\0\x11component:ma\
-in/io\x05\x01\x02\x03\0\x01\x06handle\x01B\x07\x02\x03\x02\x01\x02\x04\0\x06hand\
-le\x03\0\0\x01@\0\x01\0\x04\0\x05test1\x01\x02\x01i\x01\x01@\x01\x01h\x03\x01\0\x04\
-\0\x05test2\x01\x04\x03\0\x13component:main/main\x05\x03\x01B\x07\x02\x03\x02\x01\
-\x02\x04\0\x06handle\x03\0\0\x01@\0\x01\0\x04\0\x05test1\x01\x02\x01i\x01\x01@\x01\
-\x01h\x03\x01\0\x04\0\x05test2\x01\x04\x04\0\x13component:main/main\x05\x04\x04\0\
-\x16component:main/exports\x04\0\x0b\x0d\x01\0\x07exports\x03\0\0\0G\x09producer\
-s\x01\x0cprocessed-by\x02\x0dwit-component\x070.235.0\x10wit-bindgen-rust\x060.4\
-3.0";
+in/io\x05\x01\x01B\x07\x04\0\x06handle\x03\x01\x01i\0\x01@\0\0\x01\x04\0\x12[sta\
+tic]handle.get\x01\x02\x01h\0\x01@\x02\x04self\x03\x01xs\x01\0\x04\0\x14[method]\
+handle.write\x01\x04\x03\0\x16component:main/host-io\x05\x02\x02\x03\0\x01\x06ha\
+ndle\x01B\x07\x02\x03\x02\x01\x03\x04\0\x06handle\x03\0\0\x01@\0\x01\0\x04\0\x05\
+test1\x01\x02\x01i\x01\x01@\x01\x01h\x03\x01\0\x04\0\x05test2\x01\x04\x03\0\x13c\
+omponent:main/main\x05\x04\x02\x03\0\x02\x06handle\x01B\x07\x02\x03\x02\x01\x05\x04\
+\0\x06handle\x03\0\0\x01@\0\x01\0\x04\0\x05test1\x01\x02\x01i\x01\x01@\x01\x01h\x03\
+\x01\0\x04\0\x05test2\x01\x04\x04\0\x19component:main/outer-main\x05\x06\x04\0\x16\
+component:main/exports\x04\0\x0b\x0d\x01\0\x07exports\x03\0\0\0G\x09producers\x01\
+\x0cprocessed-by\x02\x0dwit-component\x070.235.0\x10wit-bindgen-rust\x060.43.0";
 #[inline(never)]
 #[doc(hidden)]
 pub fn __link_custom_section_describing_imports() {

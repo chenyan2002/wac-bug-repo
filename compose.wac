@@ -12,6 +12,6 @@ import %record: interface {
 
 let imports = new virt:imports { io: host-io, %record };
 let main = new root:component { io: imports.io };
-let final = new virt:exports { main: main.main, io: host-io, %record };
+let final = new virt:exports { main: main.main, io: imports.io, host-io, %record };
 export final...;
 export imports.io;
