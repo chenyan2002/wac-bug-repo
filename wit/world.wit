@@ -21,13 +21,25 @@ world root {
 world imports {
   import proxy:recorder/%record@0.1.0;
   import io;
-  export io;
+  export wrapped-io;
 }
 
+inteface wrapped-io {
+  resource handle {
+    get: static func() -> handle;
+    write: func(x: string);
+  }  
+}
+interface wrapped-main {
+  use wrapped-io.{handle};
+  test1: func();
+  test2: func(h: handle);
+}
 world exports {
   import proxy:recorder/%record@0.1.0;
   import io;
-  import main;
+  import wrapped-io;
+  import wrapped-main;
   export main;
 }
 
