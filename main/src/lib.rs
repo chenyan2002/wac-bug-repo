@@ -5,14 +5,20 @@
 impl exports::component::main::main::Guest for Stub {
   #[allow(unused_variables)]
   #[allow(async_fn_in_trait)]
-  fn test(x: exports::component::main::main::Res,) -> (){ unreachable!() }
+  fn test1() -> (){ 
+    let h = component::main::io::Handle::get();
+    h.write("test");
+  }
+  #[allow(unused_variables)]
+  #[allow(async_fn_in_trait)]
+  fn test2(h: exports::component::main::main::Handle,) -> (){ h.write("test"); }
 }
 #[allow(dead_code, clippy::all)]
 pub mod component {
   pub mod main {
 
     #[allow(dead_code, async_fn_in_trait, unused_imports, clippy::all)]
-    pub mod res {
+    pub mod io {
       #[used]
       #[doc(hidden)]
       static __FORCE_SECTION_REF: fn() =
@@ -22,11 +28,11 @@ pub mod component {
 
       #[derive(Debug)]
       #[repr(transparent)]
-      pub struct Res{
-        handle: _rt::Resource<Res>,
+      pub struct Handle{
+        handle: _rt::Resource<Handle>,
       }
 
-      impl Res{
+      impl Handle{
         #[doc(hidden)]
         pub unsafe fn from_handle(handle: u32) -> Self {
           Self {
@@ -46,14 +52,14 @@ pub mod component {
       }
       
 
-      unsafe impl _rt::WasmResource for Res{
+      unsafe impl _rt::WasmResource for Handle{
         #[inline]
         unsafe fn drop(_handle: u32) {
           
           #[cfg(target_arch = "wasm32")]
-          #[link(wasm_import_module = "component:main/res")]
+          #[link(wasm_import_module = "component:main/io")]
           unsafe extern "C" {
-            #[link_name = "[resource-drop]res"]
+            #[link_name = "[resource-drop]handle"]
             fn drop(_: i32, );
           }
 
@@ -64,6 +70,48 @@ pub mod component {
         }
       }
       
+      impl Handle {
+        #[allow(unused_unsafe, clippy::all)]
+        #[allow(async_fn_in_trait)]
+        pub fn get() -> Handle{
+          unsafe {
+
+            #[cfg(target_arch = "wasm32")]
+            #[link(wasm_import_module = "component:main/io")]
+            unsafe extern "C" {
+              #[link_name = "[static]handle.get"]
+              fn wit_import0() -> i32;
+            }
+
+            #[cfg(not(target_arch = "wasm32"))]
+            unsafe extern "C" fn wit_import0() -> i32 { unreachable!() }
+            let ret = wit_import0();
+            Handle::from_handle(ret as u32)
+          }
+        }
+      }
+      impl Handle {
+        #[allow(unused_unsafe, clippy::all)]
+        #[allow(async_fn_in_trait)]
+        pub fn write(&self,x: &str,) -> (){
+          unsafe {
+            let vec0 = x;
+            let ptr0 = vec0.as_ptr().cast::<u8>();
+            let len0 = vec0.len();
+
+            #[cfg(target_arch = "wasm32")]
+            #[link(wasm_import_module = "component:main/io")]
+            unsafe extern "C" {
+              #[link_name = "[method]handle.write"]
+              fn wit_import1(_: i32, _: *mut u8, _: usize, );
+            }
+
+            #[cfg(not(target_arch = "wasm32"))]
+            unsafe extern "C" fn wit_import1(_: i32, _: *mut u8, _: usize, ) { unreachable!() }
+            wit_import1((self).handle() as i32, ptr0.cast_mut(), len0);
+          }
+        }
+      }
 
     }
 
@@ -82,35 +130,48 @@ pub mod exports {
         super::super::super::super::__link_custom_section_describing_imports;
         
         use super::super::super::super::_rt;
-        pub type Res = super::super::super::super::component::main::res::Res;
+        pub type Handle = super::super::super::super::component::main::io::Handle;
         #[doc(hidden)]
         #[allow(non_snake_case, unused_unsafe)]
-        pub unsafe fn _export_test_cabi<T: Guest>(arg0: i32,) { unsafe {#[cfg(target_arch="wasm32")]
+        pub unsafe fn _export_test1_cabi<T: Guest>() { unsafe {#[cfg(target_arch="wasm32")]
         _rt::run_ctors_once();{
-          T::test(super::super::super::super::component::main::res::Res::from_handle(arg0 as u32))
+          T::test1()
         };
       } }
-      pub trait Guest {
-        #[allow(async_fn_in_trait)]
-        fn test(x: Res,) -> ();
-      }
       #[doc(hidden)]
-
-      macro_rules! __export_component_main_main_cabi{
-        ($ty:ident with_types_in $($path_to_types:tt)*) => (const _: () = {
-
-          #[unsafe(export_name = "component:main/main#test")]
-          unsafe extern "C" fn export_test(arg0: i32,) {
-            unsafe { $($path_to_types)*::_export_test_cabi::<$ty>(arg0) }
-          }
-        };);
-      }
-      #[doc(hidden)]
-      pub(crate) use __export_component_main_main_cabi;
-
+      #[allow(non_snake_case, unused_unsafe)]
+      pub unsafe fn _export_test2_cabi<T: Guest>(arg0: i32,) { unsafe {#[cfg(target_arch="wasm32")]
+      _rt::run_ctors_once();{
+        T::test2(super::super::super::super::component::main::io::Handle::from_handle(arg0 as u32))
+      };
+    } }
+    pub trait Guest {
+      #[allow(async_fn_in_trait)]
+      fn test1() -> ();
+      #[allow(async_fn_in_trait)]
+      fn test2(h: Handle,) -> ();
     }
+    #[doc(hidden)]
+
+    macro_rules! __export_component_main_main_cabi{
+      ($ty:ident with_types_in $($path_to_types:tt)*) => (const _: () = {
+
+        #[unsafe(export_name = "component:main/main#test1")]
+        unsafe extern "C" fn export_test1() {
+          unsafe { $($path_to_types)*::_export_test1_cabi::<$ty>() }
+        }
+        #[unsafe(export_name = "component:main/main#test2")]
+        unsafe extern "C" fn export_test2(arg0: i32,) {
+          unsafe { $($path_to_types)*::_export_test2_cabi::<$ty>(arg0) }
+        }
+      };);
+    }
+    #[doc(hidden)]
+    pub(crate) use __export_component_main_main_cabi;
 
   }
+
+}
 }
 }
 mod _rt {
@@ -251,13 +312,16 @@ export!(Stub);
 #[unsafe(link_section = "component-type:wit-bindgen:0.43.0:component:main:root:encoded world")]
 #[doc(hidden)]
 #[allow(clippy::octal_escapes)]
-pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 256] = *b"\
-\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\x85\x01\x01A\x02\x01\
-A\x05\x01B\x01\x04\0\x03res\x03\x01\x03\0\x12component:main/res\x05\0\x02\x03\0\0\
-\x03res\x01B\x05\x02\x03\x02\x01\x01\x04\0\x03res\x03\0\0\x01i\x01\x01@\x01\x01x\
-\x02\x01\0\x04\0\x04test\x01\x03\x04\0\x13component:main/main\x05\x02\x04\0\x13c\
-omponent:main/root\x04\0\x0b\x0a\x01\0\x04root\x03\0\0\0G\x09producers\x01\x0cpr\
-ocessed-by\x02\x0dwit-component\x070.235.0\x10wit-bindgen-rust\x060.43.0";
+pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 353] = *b"\
+\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xe6\x01\x01A\x02\x01\
+A\x05\x01B\x07\x04\0\x06handle\x03\x01\x01i\0\x01@\0\0\x01\x04\0\x12[static]hand\
+le.get\x01\x02\x01h\0\x01@\x02\x04self\x03\x01xs\x01\0\x04\0\x14[method]handle.w\
+rite\x01\x04\x03\0\x11component:main/io\x05\0\x02\x03\0\0\x06handle\x01B\x07\x02\
+\x03\x02\x01\x01\x04\0\x06handle\x03\0\0\x01@\0\x01\0\x04\0\x05test1\x01\x02\x01\
+i\x01\x01@\x01\x01h\x03\x01\0\x04\0\x05test2\x01\x04\x04\0\x13component:main/mai\
+n\x05\x02\x04\0\x13component:main/root\x04\0\x0b\x0a\x01\0\x04root\x03\0\0\0G\x09\
+producers\x01\x0cprocessed-by\x02\x0dwit-component\x070.235.0\x10wit-bindgen-rus\
+t\x060.43.0";
 
 #[inline(never)]
 #[doc(hidden)]

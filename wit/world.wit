@@ -1,21 +1,33 @@
 package component:main;
 
-interface res {
-  resource res;
+interface io {
+  resource handle {
+    get: static func() -> handle;
+    write: func(x: string);
+  }
 }
 
 interface main {
-  use res.{res};
-  test: func(x: res);
+  use io.{handle};
+  test1: func();
+  test2: func(h: handle);
 }
 
 world root {
-  import res;
+  import io;
   export main;
 }
 
 world imports {
-  import res;
-  export res;
+  import proxy:recorder/%record@0.1.0;
+  import io;
+  export io;
+}
+
+world exports {
+  import proxy:recorder/%record@0.1.0;
+  import io;
+  import main;
+  export main;
 }
 
