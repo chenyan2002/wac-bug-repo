@@ -11,6 +11,6 @@ import %record: interface {
 };
 
 let imports = new virt:imports { io: host-io, %record };
-let wrapped-main = new root:component { io: imports.io };
-let final = new virt:exports { wrapped-main: wrapped-main.main, io: host-io, wrapped-io: imports.io, %record };
+let wrapped-main = new root:component { io: imports.wrapped-io };
+let final = new virt:exports { wrapped-main: wrapped-main.main, io: host-io, wrapped-io: imports.wrapped-io, %record };
 export final.main;
