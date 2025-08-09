@@ -24,7 +24,7 @@ world imports {
   export wrapped-io;
 }
 
-inteface wrapped-io {
+interface wrapped-io {
   resource handle {
     get: static func() -> handle;
     write: func(x: string);
