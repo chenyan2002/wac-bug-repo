@@ -1,6 +1,6 @@
 package composed:component;
 
-import host-io: interface {
+import io: interface {
   resource handle {
     get: static func() -> handle;
     write: func(x: string);
@@ -10,8 +10,8 @@ import %record: interface {
   %record: func(method: string, args: list<string>, ret: string);
 };
 
-let imports = new virt:imports { io: host-io, %record };
+let imports = new virt:imports { io, %record };
 let main = new root:component { io: imports.io };
-let final = new virt:exports { main: main.main, io: imports.io, host-io, %record };
+let final = new virt:exports { main: main.main, io: imports.io, host-io: io, %record };
 export final...;
 export imports.io;
