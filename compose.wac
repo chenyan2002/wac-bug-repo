@@ -1,11 +1,13 @@
 package composed:component;
 
-import io: interface {
-  resource handle {
-    get: static func() -> handle;
-    write: func(x: string);
-  }
-};
+// cannot spell out io interface without going through a package. Otherwise we cannot use the type later.
+//import io: interface {
+//  resource handle {
+//    get: static func() -> handle;
+//    write: func(x: string);
+//  }
+//};
+import io: wasi:io/io;
 import %record: interface {
   %record: func(method: string, args: list<string>, ret: string);
 };
@@ -14,4 +16,3 @@ let imports = new virt:imports { io, %record };
 let wrapped-main = new root:component { io: imports.wrapped-io };
 let final = new virt:exports { wrapped-main: wrapped-main.main, io, wrapped-io: imports.wrapped-io, %record };
 export final.main;
-
