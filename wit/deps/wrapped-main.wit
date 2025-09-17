@@ -1,0 +1,6 @@
+package wrapped-component:main;
+interface main {
+  use wrapped-wasi:io/io.{handle};
+  test1: func();
+  test2: func(h: handle);
+}

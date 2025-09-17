@@ -2,11 +2,11 @@
 // Options used:
 //   * stubs
 //   * runtime_path: "wit_bindgen_rt"
-//   * proxy_component: import
-impl exports::component::main::wrapped_io::GuestHandle for component::main::io::Handle {
+//   * proxy_component: Import
+impl exports::wrapped_wasi::io::io::GuestHandle for wasi::io::io::Handle {
     #[allow(unused_variables)]
     #[allow(async_fn_in_trait)]
-    fn get() -> exports::component::main::wrapped_io::Handle {
+    fn get() -> exports::wrapped_wasi::io::io::Handle {
         let params: Vec<String> = Vec::new();
         proxy::recorder::record::record("get", &params, "");
         let res = Self::get();
@@ -23,109 +23,16 @@ impl exports::component::main::wrapped_io::GuestHandle for component::main::io::
         let res = self.write(&x);
         proxy::recorder::record::record("write", &[], &res.to_wave_string());
     }
-}
-impl exports::component::main::wrapped_io::Guest for Stub {
-    type Handle = component::main::io::Handle;
-}
-#[rustfmt::skip]
-#[allow(dead_code, clippy::all)]
-pub mod component {
-    pub mod main {
-        #[allow(dead_code, async_fn_in_trait, unused_imports, clippy::all)]
-        pub mod io {
-            #[used]
-            #[doc(hidden)]
-            static __FORCE_SECTION_REF: fn() = super::super::super::__link_custom_section_describing_imports;
-            use super::super::super::_rt;
-            #[derive(Debug)]
-            #[repr(transparent)]
-            pub struct Handle {
-                handle: _rt::Resource<Handle>,
-            }
-            impl Handle {
-                #[doc(hidden)]
-                pub unsafe fn from_handle(handle: u32) -> Self {
-                    Self {
-                        handle: unsafe { _rt::Resource::from_handle(handle) },
-                    }
-                }
-                #[doc(hidden)]
-                pub fn take_handle(&self) -> u32 {
-                    _rt::Resource::take_handle(&self.handle)
-                }
-                #[doc(hidden)]
-                pub fn handle(&self) -> u32 {
-                    _rt::Resource::handle(&self.handle)
-                }
-            }
-            impl crate::ToExport for Handle {
-                type Output = crate::exports::component::main::wrapped_io::Handle;
-                fn to_export(self) -> Self::Output {
-                    Self::Output::new(self)
-                }
-            }
-            unsafe impl _rt::WasmResource for Handle {
-                #[inline]
-                unsafe fn drop(_handle: u32) {
-                    #[cfg(target_arch = "wasm32")]
-                    #[link(wasm_import_module = "component:main/io")]
-                    unsafe extern "C" {
-                        #[link_name = "[resource-drop]handle"]
-                        fn drop(_: i32);
-                    }
-                    #[cfg(not(target_arch = "wasm32"))]
-                    unsafe extern "C" fn drop(_: i32) {
-                        unreachable!()
-                    }
-                    unsafe {
-                        drop(_handle as i32);
-                    }
-                }
-            }
-            impl Handle {
-                #[allow(unused_unsafe, clippy::all)]
-                #[allow(async_fn_in_trait)]
-                pub fn get() -> Handle {
-                    unsafe {
-                        #[cfg(target_arch = "wasm32")]
-                        #[link(wasm_import_module = "component:main/io")]
-                        unsafe extern "C" {
-                            #[link_name = "[static]handle.get"]
-                            fn wit_import0() -> i32;
-                        }
-                        #[cfg(not(target_arch = "wasm32"))]
-                        unsafe extern "C" fn wit_import0() -> i32 {
-                            unreachable!()
-                        }
-                        let ret = wit_import0();
-                        Handle::from_handle(ret as u32)
-                    }
-                }
-            }
-            impl Handle {
-                #[allow(unused_unsafe, clippy::all)]
-                #[allow(async_fn_in_trait)]
-                pub fn write(&self, x: &str) -> () {
-                    unsafe {
-                        let vec0 = x;
-                        let ptr0 = vec0.as_ptr().cast::<u8>();
-                        let len0 = vec0.len();
-                        #[cfg(target_arch = "wasm32")]
-                        #[link(wasm_import_module = "component:main/io")]
-                        unsafe extern "C" {
-                            #[link_name = "[method]handle.write"]
-                            fn wit_import1(_: i32, _: *mut u8, _: usize);
-                        }
-                        #[cfg(not(target_arch = "wasm32"))]
-                        unsafe extern "C" fn wit_import1(_: i32, _: *mut u8, _: usize) {
-                            unreachable!()
-                        }
-                        wit_import1((self).handle() as i32, ptr0.cast_mut(), len0);
-                    }
-                }
-            }
-        }
+    #[allow(unused_variables)]
+    #[allow(async_fn_in_trait)]
+    fn get_wrapped(
+        x: exports::wrapped_wasi::io::io::Host,
+    ) -> exports::wrapped_wasi::io::io::Handle {
+        x.to_export()
     }
+}
+impl exports::wrapped_wasi::io::io::Guest for Stub {
+    type Handle = wasi::io::io::Handle;
 }
 #[rustfmt::skip]
 #[allow(dead_code, clippy::all)]
@@ -207,15 +114,116 @@ pub mod proxy {
 }
 #[rustfmt::skip]
 #[allow(dead_code, clippy::all)]
+pub mod wasi {
+    pub mod io {
+        #[allow(dead_code, async_fn_in_trait, unused_imports, clippy::all)]
+        pub mod io {
+            #[used]
+            #[doc(hidden)]
+            static __FORCE_SECTION_REF: fn() = super::super::super::__link_custom_section_describing_imports;
+            use super::super::super::_rt;
+            #[derive(Debug)]
+            #[repr(transparent)]
+            pub struct Handle {
+                handle: _rt::Resource<Handle>,
+            }
+            impl Handle {
+                #[doc(hidden)]
+                pub unsafe fn from_handle(handle: u32) -> Self {
+                    Self {
+                        handle: unsafe { _rt::Resource::from_handle(handle) },
+                    }
+                }
+                #[doc(hidden)]
+                pub fn take_handle(&self) -> u32 {
+                    _rt::Resource::take_handle(&self.handle)
+                }
+                #[doc(hidden)]
+                pub fn handle(&self) -> u32 {
+                    _rt::Resource::handle(&self.handle)
+                }
+            }
+            impl crate::ToExport for Handle {
+                type Output = crate::exports::wrapped_wasi::io::io::Handle;
+                fn to_export(self) -> Self::Output {
+                    Self::Output::new(self)
+                }
+            }
+            unsafe impl _rt::WasmResource for Handle {
+                #[inline]
+                unsafe fn drop(_handle: u32) {
+                    #[cfg(target_arch = "wasm32")]
+                    #[link(wasm_import_module = "wasi:io/io")]
+                    unsafe extern "C" {
+                        #[link_name = "[resource-drop]handle"]
+                        fn drop(_: i32);
+                    }
+                    #[cfg(not(target_arch = "wasm32"))]
+                    unsafe extern "C" fn drop(_: i32) {
+                        unreachable!()
+                    }
+                    unsafe {
+                        drop(_handle as i32);
+                    }
+                }
+            }
+            impl Handle {
+                #[allow(unused_unsafe, clippy::all)]
+                #[allow(async_fn_in_trait)]
+                pub fn get() -> Handle {
+                    unsafe {
+                        #[cfg(target_arch = "wasm32")]
+                        #[link(wasm_import_module = "wasi:io/io")]
+                        unsafe extern "C" {
+                            #[link_name = "[static]handle.get"]
+                            fn wit_import0() -> i32;
+                        }
+                        #[cfg(not(target_arch = "wasm32"))]
+                        unsafe extern "C" fn wit_import0() -> i32 {
+                            unreachable!()
+                        }
+                        let ret = wit_import0();
+                        Handle::from_handle(ret as u32)
+                    }
+                }
+            }
+            impl Handle {
+                #[allow(unused_unsafe, clippy::all)]
+                #[allow(async_fn_in_trait)]
+                pub fn write(&self, x: &str) -> () {
+                    unsafe {
+                        let vec0 = x;
+                        let ptr0 = vec0.as_ptr().cast::<u8>();
+                        let len0 = vec0.len();
+                        #[cfg(target_arch = "wasm32")]
+                        #[link(wasm_import_module = "wasi:io/io")]
+                        unsafe extern "C" {
+                            #[link_name = "[method]handle.write"]
+                            fn wit_import1(_: i32, _: *mut u8, _: usize);
+                        }
+                        #[cfg(not(target_arch = "wasm32"))]
+                        unsafe extern "C" fn wit_import1(_: i32, _: *mut u8, _: usize) {
+                            unreachable!()
+                        }
+                        wit_import1((self).handle() as i32, ptr0.cast_mut(), len0);
+                    }
+                }
+            }
+        }
+    }
+}
+#[rustfmt::skip]
+#[allow(dead_code, clippy::all)]
 pub mod exports {
-    pub mod component {
-        pub mod main {
+    pub mod wrapped_wasi {
+        pub mod io {
             #[allow(dead_code, async_fn_in_trait, unused_imports, clippy::all)]
-            pub mod wrapped_io {
+            pub mod io {
                 #[used]
                 #[doc(hidden)]
                 static __FORCE_SECTION_REF: fn() = super::super::super::super::__link_custom_section_describing_imports;
                 use super::super::super::super::_rt;
+                pub type Host = super::super::super::super::wasi::io::io::Handle;
                 #[derive(Debug)]
                 #[repr(transparent)]
                 pub struct Handle {
@@ -322,7 +330,7 @@ pub mod exports {
                     }
                 }
                 impl<'a> crate::ToImport<'a> for Handle {
-                    type Output = crate::component::main::io::Handle;
+                    type Output = crate::wasi::io::io::Handle;
                     fn to_import_owned(self) -> Self::Output {
                         self.into_inner()
                     }
@@ -331,7 +339,7 @@ pub mod exports {
                     }
                 }
                 impl<'a> crate::ToImport<'a> for HandleBorrow<'a> {
-                    type Output = crate::component::main::io::Handle;
+                    type Output = crate::wasi::io::io::Handle;
                     fn to_import(&'a self) -> &'a Self::Output {
                         self.get()
                     }
@@ -343,7 +351,7 @@ pub mod exports {
                     #[inline]
                     unsafe fn drop(_handle: u32) {
                         #[cfg(target_arch = "wasm32")]
-                        #[link(wasm_import_module = "[export]component:main/wrapped-io")]
+                        #[link(wasm_import_module = "[export]wrapped-wasi:io/io")]
                         unsafe extern "C" {
                             #[link_name = "[resource-drop]handle"]
                             fn drop(_: i32);
@@ -389,6 +397,23 @@ pub mod exports {
                         };
                     }
                 }
+                #[doc(hidden)]
+                #[allow(non_snake_case, unused_unsafe)]
+                pub unsafe fn _export_static_handle_get_wrapped_cabi<T: GuestHandle>(
+                    arg0: i32,
+                ) -> i32 {
+                    unsafe {
+                        #[cfg(target_arch = "wasm32")] _rt::run_ctors_once();
+                        let result0 = {
+                            T::get_wrapped(
+                                super::super::super::super::wasi::io::io::Handle::from_handle(
+                                    arg0 as u32,
+                                ),
+                            )
+                        };
+                        (result0).take_handle() as i32
+                    }
+                }
                 pub trait Guest {
                     type Handle: GuestHandle;
                 }
@@ -399,7 +424,7 @@ pub mod exports {
                         Self: Sized,
                     {
                         #[cfg(target_arch = "wasm32")]
-                        #[link(wasm_import_module = "[export]component:main/wrapped-io")]
+                        #[link(wasm_import_module = "[export]wrapped-wasi:io/io")]
                         unsafe extern "C" {
                             #[link_name = "[resource-new]handle"]
                             fn new(_: *mut u8) -> i32;
@@ -416,7 +441,7 @@ pub mod exports {
                         Self: Sized,
                     {
                         #[cfg(target_arch = "wasm32")]
-                        #[link(wasm_import_module = "[export]component:main/wrapped-io")]
+                        #[link(wasm_import_module = "[export]wrapped-wasi:io/io")]
                         unsafe extern "C" {
                             #[link_name = "[resource-rep]handle"]
                             fn rep(_: i32) -> *mut u8;
@@ -431,29 +456,36 @@ pub mod exports {
                     fn get() -> Handle;
                     #[allow(async_fn_in_trait)]
                     fn write(&self, x: _rt::String) -> ();
+                    #[allow(async_fn_in_trait)]
+                    fn get_wrapped(x: Host) -> Handle;
                 }
                 #[doc(hidden)]
-                macro_rules! __export_component_main_wrapped_io_cabi {
+                macro_rules! __export_wrapped_wasi_io_io_cabi {
                     ($ty:ident with_types_in $($path_to_types:tt)*) => {
                         const _ : () = { #[unsafe (export_name =
-                        "component:main/wrapped-io#[static]handle.get")] unsafe extern "C" fn
+                        "wrapped-wasi:io/io#[static]handle.get")] unsafe extern "C" fn
                         export_static_handle_get() -> i32 { unsafe { $($path_to_types)*::
                         _export_static_handle_get_cabi::<<$ty as $($path_to_types)*::
                         Guest >::Handle > () } } #[unsafe (export_name =
-                        "component:main/wrapped-io#[method]handle.write")] unsafe extern "C" fn
+                        "wrapped-wasi:io/io#[method]handle.write")] unsafe extern "C" fn
                         export_method_handle_write(arg0 : * mut u8, arg1 : * mut u8, arg2
                         : usize,) { unsafe { $($path_to_types)*::
                         _export_method_handle_write_cabi::<<$ty as $($path_to_types)*::
-                        Guest >::Handle > (arg0, arg1, arg2) } } const _ : () = {
-                        #[doc(hidden)] #[unsafe (export_name =
-                        "component:main/wrapped-io#[dtor]handle")] #[allow(non_snake_case)]
+                        Guest >::Handle > (arg0, arg1, arg2) } } #[unsafe (export_name =
+                        "wrapped-wasi:io/io#[static]handle.get-wrapped")] unsafe extern
+                        "C" fn export_static_handle_get_wrapped(arg0 : i32,) -> i32 {
+                        unsafe { $($path_to_types)*::
+                        _export_static_handle_get_wrapped_cabi::<<$ty as
+                        $($path_to_types)*:: Guest >::Handle > (arg0) } } const _ : () =
+                        { #[doc(hidden)] #[unsafe (export_name =
+                        "wrapped-wasi:io/io#[dtor]handle")] #[allow(non_snake_case)]
                         unsafe extern "C" fn dtor(rep : * mut u8) { unsafe {
                         $($path_to_types)*:: Handle::dtor::< <$ty as $($path_to_types)*::
                         Guest >::Handle > (rep) } } }; };
                     };
                 }
                 #[doc(hidden)]
-                pub(crate) use __export_component_main_wrapped_io_cabi;
+                pub(crate) use __export_wrapped_wasi_io_io_cabi;
             }
         }
     }
@@ -597,8 +629,8 @@ macro_rules! __export_imports_impl {
     };
     ($ty:ident with_types_in $($path_to_types_root:tt)*) => {
         $($path_to_types_root)*::
-        exports::component::main::wrapped_io::__export_component_main_wrapped_io_cabi!($ty with_types_in
-        $($path_to_types_root)*:: exports::component::main::wrapped_io);
+        exports::wrapped_wasi::io::io::__export_wrapped_wasi_io_io_cabi!($ty
+        with_types_in $($path_to_types_root)*:: exports::wrapped_wasi::io::io);
     };
 }
 #[doc(inline)]
@@ -674,21 +706,23 @@ impl<T: std::fmt::Debug> ToWave for T {}
 #[rustfmt::skip]
 #[cfg(target_arch = "wasm32")]
 #[unsafe(
-    link_section = "component-type:wit-bindgen:0.43.0:component:main:imports:encoded world"
+    link_section = "component-type:wit-bindgen:0.43.0:root:main:imports:encoded world"
 )]
 #[doc(hidden)]
 #[allow(clippy::octal_escapes)]
-pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 458] = *b"\
-\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xcc\x02\x01A\x02\x01\
-A\x06\x01B\x03\x01ps\x01@\x03\x06methods\x04args\0\x03rets\x01\0\x04\0\x06record\
+pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 507] = *b"\
+\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xfd\x02\x01A\x02\x01\
+A\x07\x01B\x03\x01ps\x01@\x03\x06methods\x04args\0\x03rets\x01\0\x04\0\x06record\
 \x01\x01\x03\0\x1bproxy:recorder/record@0.1.0\x05\0\x01B\x07\x04\0\x06handle\x03\
 \x01\x01i\0\x01@\0\0\x01\x04\0\x12[static]handle.get\x01\x02\x01h\0\x01@\x02\x04\
-self\x03\x01xs\x01\0\x04\0\x14[method]handle.write\x01\x04\x03\0\x11component:ma\
-in/io\x05\x01\x01B\x07\x04\0\x06handle\x03\x01\x01i\0\x01@\0\0\x01\x04\0\x12[sta\
-tic]handle.get\x01\x02\x01h\0\x01@\x02\x04self\x03\x01xs\x01\0\x04\0\x14[method]\
-handle.write\x01\x04\x04\0\x19component:main/wrapped-io\x05\x02\x04\0\x16compone\
-nt:main/imports\x04\0\x0b\x0d\x01\0\x07imports\x03\0\0\0G\x09producers\x01\x0cpr\
-ocessed-by\x02\x0dwit-component\x070.235.0\x10wit-bindgen-rust\x060.43.0";
+self\x03\x01xs\x01\0\x04\0\x14[method]handle.write\x01\x04\x03\0\x0awasi:io/io\x05\
+\x01\x02\x03\0\x01\x06handle\x01B\x0c\x02\x03\x02\x01\x02\x04\0\x04host\x03\0\0\x04\
+\0\x06handle\x03\x01\x01i\x02\x01@\0\0\x03\x04\0\x12[static]handle.get\x01\x04\x01\
+h\x02\x01@\x02\x04self\x05\x01xs\x01\0\x04\0\x14[method]handle.write\x01\x06\x01\
+i\x01\x01@\x01\x01x\x07\0\x03\x04\0\x1a[static]handle.get-wrapped\x01\x08\x04\0\x12\
+wrapped-wasi:io/io\x05\x03\x04\0\x11root:main/imports\x04\0\x0b\x0d\x01\0\x07imp\
+orts\x03\0\0\0G\x09producers\x01\x0cprocessed-by\x02\x0dwit-component\x070.235.0\
+\x10wit-bindgen-rust\x060.43.0";
 #[inline(never)]
 #[doc(hidden)]
 pub fn __link_custom_section_describing_imports() {

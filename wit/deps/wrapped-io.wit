@@ -1,0 +1,9 @@
+package wrapped-wasi:io;
+interface io {
+  use wasi:io/io.{handle as host};
+  resource handle {
+    get: static func() -> handle;
+    write: func(x: string);
+    get-wrapped: static func(x: host) -> handle;
+  }
+}
