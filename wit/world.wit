@@ -1,33 +1,21 @@
-package component:main;
-
-interface io {
-  resource handle {
-    get: static func() -> handle;
-    write: func(x: string);
-  }
-}
-
-interface main {
-  use io.{handle};
-  test1: func();
-  test2: func(h: handle);
-}
+package root:main;
 
 world root {
-  import io;
-  export main;
+  import wasi:io/io;
+  export component:main/main;
 }
 
 world imports {
   import proxy:recorder/%record@0.1.0;
-  import io;
-  export io;
+  import wasi:io/io;
+  export wrapped-wasi:io/io;
 }
 
 world exports {
   import proxy:recorder/%record@0.1.0;
-  import io;
-  import main;
-  export main;
+  import wasi:io/io;
+  import wrapped-wasi:io/io;
+  import wrapped-component:main/main;
+  export component:main/main;
 }
 
