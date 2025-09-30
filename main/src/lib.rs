@@ -5,10 +5,15 @@
 impl exports::component::main::main::Guest for Stub {
   #[allow(unused_variables)]
   #[allow(async_fn_in_trait)]
-  fn test1() -> (){ unreachable!() }
+    fn test1() -> (){
+        let h = exports::component::main::main::Handle::get();
+        h.write("test");
+    }
   #[allow(unused_variables)]
   #[allow(async_fn_in_trait)]
-  fn test2(h: exports::component::main::main::Handle,) -> (){ unreachable!() }
+    fn test2(h: exports::component::main::main::Handle,) -> (){
+        h.write("test")
+    }
 }
 #[allow(dead_code, clippy::all)]
 pub mod wasi {

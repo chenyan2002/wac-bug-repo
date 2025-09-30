@@ -6,16 +6,14 @@ world root {
 }
 
 world imports {
-  import proxy:recorder/%record@0.1.0;
-  import wasi:io/io;
-  export wrapped-wasi:io/io;
+  //import proxy:recorder/replay@0.1.0;
+  export wasi:io/io;
 }
 
 world exports {
-  import proxy:recorder/%record@0.1.0;
+  //import proxy:recorder/replay@0.1.0;
   import wasi:io/io;
-  import wrapped-wasi:io/io;
-  import wrapped-component:main/main;
-  export component:main/main;
+  import component:main/main;
+  export start: interface { start: func(); }
 }
 

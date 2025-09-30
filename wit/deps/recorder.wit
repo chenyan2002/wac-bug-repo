@@ -5,7 +5,7 @@ interface %record {
 }
 
 interface replay {
-  replay: func(method: string, args: list<string>, ret: string);
+  replay: func(method: string, args: option<string>, is-export: bool) -> string;
 }
 
 world host {
